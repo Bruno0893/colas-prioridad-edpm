@@ -1,0 +1,56 @@
+ERRORES CONOCIDOS
+
+/p_queue.pl
+Ninguno
+
+/interfaz.py
+
+> No puede procesar el montículo al añadir varios elementos
+> Muestra los elementos como referencias a Functors (si se realizan consultas consecutivas en cada ciclo)
+> Muestra los elementos como referencias a Atomos (si se realiza una sola consulta con todos los elementos)
+
+SALIDA VIGENTE
+
+/prueba.py (en pukurin-version-comando)
+
+monticulo(nil, 0)
+anadir_elemento(monticulo(nil, 0),1,juan,H)
+monticulo(t(juan, 1, []), 1)
+anadir_elemento(monticulo(t(juan, 1, []), 1),2,lucho,H)
+monticulo(t(juan, 1, [Functor(8253837,3,lucho,2,[])]), 2)
+
+
+anadir_elemento(monticulo(t(juan, 1, [Functor(8253837,3,lucho,2,[])]), 2),3,mario,H) <----- Functor
+
+Traceback (most recent call last):
+  File "prueba.py", line 37, in <module>
+    main()
+  File "prueba.py", line 34, in main
+    consultar(ordenes_de_impresion)
+  File "prueba.py", line 21, in consultar
+    for resultado in prolog.query(consulta):
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/prolog.py", line 124, in __call__
+    term = getTerm(PL_exception(swipl_qid))
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 406, in getTerm
+    res = getFunctor(t)
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 429, in getFunctor
+    return Functor.fromTerm(t)
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 252, in fromTerm
+    args.append(getTerm(a0 + i))
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 406, in getTerm
+    res = getFunctor(t)
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 429, in getFunctor
+    return Functor.fromTerm(t)
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 252, in fromTerm
+    args.append(getTerm(a0 + i))
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 402, in getTerm
+    res = _getterm_router[p](t)
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/easy.py", line 387, in getString
+    if PL_get_string_chars(t, byref(s), byref(slen)):
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/core.py", line 556, in check_and_call
+    args[i] = list_to_bytes_list(arg)
+  File "/usr/local/lib/python3.5/dist-packages/pyswip/core.py", line 488, in list_to_bytes_list
+    pList = c_char_p * len(strList)
+TypeError: object of type 'CArgObject' has no len()
+
+

@@ -1,18 +1,27 @@
-from pyswip import Prolog
+from pyswip import Prolog, Functor, Variable, Query
 prolog = Prolog()
+prolog.consult("p_queue.pl")
+
 
 def consultar(ordenes_de_impresion):
-    if ordenes_de_impresion != []:
-        #prolog.query("[p_queue]")
+    prolog.consult("p_queue.pl")
 
-        H = "monticulo(nil,0)"
-        for i in range(len(ordenes_de_impresion)//2):
-                consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
-                for resultado_parcial in prolog.query(consulta):
-                    H = resultado_parcial["H"]
-        consulta = "monticulo_a_lista(" + H + ", L)"
-        #for resultado in prolog.query(consulta):
-            #orden_final = resultado["L"]
+
+    if ordenes_de_impresion != []:
+
+        for ini in prolog.query("monticulo_vacio(H)"):
+            H = ini["H"]
+            print(H)
+
+        cont = len(ordenes_de_impresion) // 2
+
+        for i in range(cont):
+            consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
+            print(consulta)
+            for resultado in prolog.query(consulta):
+                H = resultado["H"]
+                print(H)
+
 
 def main():
     # Abrimos el archivo para leer su contenido

@@ -32,6 +32,7 @@
 # Este paquete permite conectar la implementacion en Prolog con la interfaz en Python
 from pyswip import Prolog
 prolog = Prolog()
+prolog.consult("p_queue.pl")
 
 # Tkinter es un paquete para interfaz grafica en Python
 from tkinter import *
@@ -51,21 +52,22 @@ def leer_datos(ordenes_de_impresion):
     # separa la prioridad y la ruta de cada archivo y los guarda en una lista
     ordenes_de_impresion = ordenes.split()
 
-def consultar(ordenes_de_impresion, orden_final):
-    if ordenes_de_impresion != []:
-        consulta = "monticulo_vacio(H0), "
-        for i in range(len(ordenes_de_impresion)//2):
-            consulta = consulta + 'anadir_elemento(H' + str(i) + ', ' +  ordenes_de_impresion[2*i] + ', ' + ordenes_de_impresion[2*i + 1] + ', H' + str(i + 1) + '), '
+#def consultar(ordenes_de_impresion, orden_final):
+#    if ordenes_de_impresion != []:
+#        H = "monticulo(nil,0)"
+#
+#        #Añade uno a uno los elementos a la cola
+#        for i in range(len(ordenes_de_impresion)//2):
+#            consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
+#            # anadir_elemento(H,P,E,H0)
+#            for resultado_parcial in prolog.query(consulta):
+#                H = resultado_parcial["H"]
+#
+#        #Consulta el orden final
+#        consulta = "monticulo_a_lista(" + H + ", L)"
+#        for resultado in prolog.query(consulta):
+#            orden_final = resultado["L"]
 
-            consulta = consulta + 'monticulo_a_lista(H' + str(len(ordenes_de_impresion)/2) + ' , L)'
-
-
-        for resultado in prolog.query(consulta):
-            #Se obtiene una lista con los ordenes
-            orden_final = resultado["L"]
-            print(resultado["L"])
-
-###falta esta parte
 
 #ubicacion = StringerVar()
 
@@ -89,9 +91,9 @@ class Ventana(Frame):
         #caja1=Entry(self, textvariable=ubicacion).place(x=30, y=80)
         caja1=Entry(self).place(x=30, y=80)
 
-        processButton = Button(self, text="Hallar orden",
-            command = consultar(ordenes_de_impresion, orden_final))
-        processButton.place(x = 0, y = 250)
+        #processButton = Button(self, text="Hallar orden",
+        #    command = consultar(ordenes_de_impresion, orden_final))
+        #processButton.place(x = 0, y = 250)
 
         label2 = Label(self, text= orden_final).place(x=10, y=10)
 

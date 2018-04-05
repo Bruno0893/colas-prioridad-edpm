@@ -8,7 +8,7 @@ Ninguno
 > No puede procesar el montículo al añadir varios elementos
 > Muestra los elementos como referencias a Functors (si se realizan consultas consecutivas en cada ciclo)
 > Muestra los elementos como referencias a Atomos (si se realiza una sola consulta con todos los elementos)
-> Las funciones se activan durante el arranque y no al pulsar el botn.
+> Las funciones se activan durante el arranque y no al pulsar el botón.
 
 SALIDA VIGENTE
 

@@ -39,43 +39,50 @@ from tkinter import *
 from tkinter import ttk, Tk, BOTH
 from tkinter.ttk import Frame, Button, Style
 
-# Transforma el archivo de texto en una lista
-#def leer_datos(ordenes_de_impresion, ubicacion):
+# Inicializamos las variables
+ordenes_de_impresion = []
+orden_final = []
 
-def leer_datos(ordenes_de_impresion):
+# Transforma el archivo de texto en una lista
+def leer_datos(ordenes_de_impresion, ubicacion):
+#def leer_datos(ordenes_de_impresion):
 
     # Abrimos el archivo para leer su contenido
-    Hf = open ('orden_impresion.txt','r')
+    Hf = open (ubicacion,'r')
     ordenes = Hf.read() #almacena una cadena de caracteres
     Hf.close()
-
     # separa la prioridad y la ruta de cada archivo y los guarda en una lista
     ordenes_de_impresion = ordenes.split()
+    consultar(ordenes_de_impresion, orden_final)
 
 def consultar(ordenes_de_impresion,orden_final):
 
+    if ordenes_de_impresion != []: #No procesa nada si no hay contenido en la orden de impresion
 
-    if ordenes_de_impresion != []:
-
-        for ini in prolog.query("monticulo_vacio(H)"):
+        for ini in prolog.query("monticulo_vacio(H)"): #Se inicializa el montículo
             H = ini["H"]
 
         cont = len(ordenes_de_impresion) // 2
 
-        for i in range(cont):
+        for i in range(cont): #Se añade uno a uno los elementos al montículo mediante consultas sucesivas
             consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
             for resultado in prolog.query(consulta):
                 H = resultado["H"]
                 H = H.replace("Functor(8253837,3,","t(")
 
-        for i in range(cont):
+        for i in range(cont): #Se extrae uno a uno los elementos del montículo, se ubica cada uno al final
             consulta = "obtener_primero(" + H + ", P,E,H)"
             for resultado in prolog.query(consulta):
                 orden_final.append(resultado["E"])
                 H = resultado["H"]
                 H = H.replace("Functor(8253837,3,","t(")
 
-        orden_final.reverse()
+        for i in orden_final:
+            print(i)
+
+def leer_datos_boton():
+    ubicacion = entrada.get()
+    leer_datos(ordenes_de_impresion,ubicacion)
 
 class Ventana(Frame):
 
@@ -90,22 +97,16 @@ class Ventana(Frame):
         self.style = Style()
         self.style.theme_use("default")
 
-        self.master.title("Ordenes de impresión")
+        self.master.title("Órdenes de impresión")
         self.pack(fill=BOTH, expand=1)
 
-        label1 = Label(self, text="Ingresa la ubicación del archivo de órdenes de impresión").place(x=10, y=10)
-        #caja1=Entry(self, textvariable=ubicacion).place(x=30, y=80)
-        caja1=Entry(self).place(x=30, y=80)
+        label1 = Label(raiz, text="Ingresa la ubicación del archivo de órdenes de impresión").place(x=10, y=10)
+        caja_ingresa_ubicacion=Entry(self, textvariable=entrada).place(x=30, y=80)
 
-        processButton = Button(self, text="Hallar orden",
-            command = consultar(ordenes_de_impresion, orden_final))
+        #Boton para procesar la informacion
+        processButton = Button(raiz, text="Hallar orden",
+            command = leer_datos_boton)
         processButton.place(x = 0, y = 250)
-
-        label2 = Label(self, text= orden_final).place(x=10, y=10)
-
-        inputButton = Button(self, text="Cargar archivo",
-            command = leer_datos(ordenes_de_impresion))
-        inputButton.place(x = 125, y = 250)
 
         quitButton = Button(self, text="Salir",
             command=self.quit)
@@ -115,11 +116,10 @@ class Ventana(Frame):
 
 # Para definir la ventana principal
 raiz = Tk()
-orden_final = ''
 
-# Inicializamos las variables
-ordenes_de_impresion = []
-
+# Se crean las variables para leer la ubicacion del archivo
+entrada = StringVar()
+ubicacion = StringVar()
 
 # Definimos las dimensiones de la pantalla
 raiz.geometry("400x300+300+300")

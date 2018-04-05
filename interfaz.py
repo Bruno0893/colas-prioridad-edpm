@@ -44,7 +44,7 @@ ordenes_de_impresion = []
 orden_final = []
 
 # Transforma el archivo de texto en una lista
-def leer_datos(ordenes_de_impresion, ubicacion):
+def leer_datos(ordenes_de_impresion, ubicacion,listbox):
 #def leer_datos(ordenes_de_impresion):
 
     # Abrimos el archivo para leer su contenido
@@ -53,10 +53,10 @@ def leer_datos(ordenes_de_impresion, ubicacion):
     Hf.close()
     # separa la prioridad y la ruta de cada archivo y los guarda en una lista
     ordenes_de_impresion = ordenes.split()
-    consultar(ordenes_de_impresion, orden_final)
+    consultar(ordenes_de_impresion, orden_final,listbox)
 
-def consultar(ordenes_de_impresion,orden_final):
-
+def consultar(ordenes_de_impresion,orden_final,listbox):
+    orden_final = []
     if ordenes_de_impresion != []: #No procesa nada si no hay contenido en la orden de impresion
 
         for ini in prolog.query("monticulo_vacio(H)"): #Se inicializa el montículo
@@ -73,16 +73,18 @@ def consultar(ordenes_de_impresion,orden_final):
         for i in range(cont): #Se extrae uno a uno los elementos del montículo, se ubica cada uno al final
             consulta = "obtener_primero(" + H + ", P,E,H)"
             for resultado in prolog.query(consulta):
-                orden_final.append(resultado["E"])
+                orden_vigente = str(i+1) + '. ' + resultado["E"]
+                orden_final.append(orden_vigente)
                 H = resultado["H"]
                 H = H.replace("Functor(8253837,3,","t(")
 
         for i in orden_final:
-            print(i)
+            listbox.insert(END,i)
 
 def leer_datos_boton():
     ubicacion = entrada.get()
-    leer_datos(ordenes_de_impresion,ubicacion)
+    listbox.delete(0, END)
+    leer_datos(ordenes_de_impresion,ubicacion,listbox)
 
 class Ventana(Frame):
 
@@ -100,17 +102,18 @@ class Ventana(Frame):
         self.master.title("Órdenes de impresión")
         self.pack(fill=BOTH, expand=1)
 
+
         label1 = Label(raiz, text="Ingresa la ubicación del archivo de órdenes de impresión").place(x=10, y=10)
         caja_ingresa_ubicacion=Entry(self, textvariable=entrada).place(x=30, y=80)
 
         #Boton para procesar la informacion
         processButton = Button(raiz, text="Hallar orden",
             command = leer_datos_boton)
-        processButton.place(x = 0, y = 250)
+        processButton.place(x = 0, y = 350)
 
         quitButton = Button(self, text="Salir",
             command=self.quit)
-        quitButton.place(x=250, y=250)
+        quitButton.place(x=300, y=350)
 
 
 
@@ -122,10 +125,12 @@ entrada = StringVar()
 ubicacion = StringVar()
 
 # Definimos las dimensiones de la pantalla
-raiz.geometry("400x300+300+300")
+raiz.geometry("400x400+400+400")
 
 # Llamamos al contenido de la ventana
 app = Ventana()
+listbox = Listbox(raiz)
+listbox.place(x=30, y=150)
 
 #Dejamos la ventana activa
 raiz.mainloop()

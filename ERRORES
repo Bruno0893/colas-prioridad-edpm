@@ -1,3 +1,27 @@
+2018/4/5
+
+ERRORES CONOCIDOS
+
+/p_queue.pl
+Ninguno
+
+/interfaz.py
+> Las funciones se activan durante el arranque y no al pulsar el botón.
+
+OUTPUT VIGENTE
+/prueba.py (en pukurin-version-comando)
+Elementos en orden, uno impreso a la vez
+
+ERRORES CORREGIDOS
+
+(2018/4/5)
+> No puede procesar el montículo al añadir varios elementos
+> Muestra los elementos como referencias a Functors (si se realizan consultas consecutivas en cada ciclo)
+> Muestra los elementos como referencias a Atomos (si se realiza una sola consulta con todos los elementos)
+
+--------------------------------------------------------------------------------------------------------------------------------
+2018/4/2 - 2018/4/4
+
 ERRORES CONOCIDOS
 
 /p_queue.pl
@@ -10,7 +34,8 @@ Ninguno
 > Muestra los elementos como referencias a Atomos (si se realiza una sola consulta con todos los elementos)
 > Las funciones se activan durante el arranque y no al pulsar el botón.
 
-SALIDA VIGENTE
+
+OUTPUT
 
 /prueba.py (en pukurin-version-comando)
 

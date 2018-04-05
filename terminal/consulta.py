@@ -1,6 +1,6 @@
 from pyswip import Prolog
 prolog = Prolog()
-prolog.consult("p_queue.pl")
+prolog.consult("p_queue.pl") 
 
 
 def consultar(ordenes_de_impresion):

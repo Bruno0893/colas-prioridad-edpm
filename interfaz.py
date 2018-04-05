@@ -52,24 +52,30 @@ def leer_datos(ordenes_de_impresion):
     # separa la prioridad y la ruta de cada archivo y los guarda en una lista
     ordenes_de_impresion = ordenes.split()
 
-#def consultar(ordenes_de_impresion, orden_final):
-#    if ordenes_de_impresion != []:
-#        H = "monticulo(nil,0)"
-#
-#        #Añade uno a uno los elementos a la cola
-#        for i in range(len(ordenes_de_impresion)//2):
-#            consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
-#            # anadir_elemento(H,P,E,H0)
-#            for resultado_parcial in prolog.query(consulta):
-#                H = resultado_parcial["H"]
-#
-#        #Consulta el orden final
-#        consulta = "monticulo_a_lista(" + H + ", L)"
-#        for resultado in prolog.query(consulta):
-#            orden_final = resultado["L"]
+def consultar(ordenes_de_impresion,orden_final):
 
 
-#ubicacion = StringerVar()
+    if ordenes_de_impresion != []:
+
+        for ini in prolog.query("monticulo_vacio(H)"):
+            H = ini["H"]
+
+        cont = len(ordenes_de_impresion) // 2
+
+        for i in range(cont):
+            consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
+            for resultado in prolog.query(consulta):
+                H = resultado["H"]
+                H = H.replace("Functor(8253837,3,","t(")
+
+        for i in range(cont):
+            consulta = "obtener_primero(" + H + ", P,E,H)"
+            for resultado in prolog.query(consulta):
+                orden_final.append(resultado["E"])
+                H = resultado["H"]
+                H = H.replace("Functor(8253837,3,","t(")
+
+        orden_final.reverse()
 
 class Ventana(Frame):
 
@@ -91,9 +97,9 @@ class Ventana(Frame):
         #caja1=Entry(self, textvariable=ubicacion).place(x=30, y=80)
         caja1=Entry(self).place(x=30, y=80)
 
-        #processButton = Button(self, text="Hallar orden",
-        #    command = consultar(ordenes_de_impresion, orden_final))
-        #processButton.place(x = 0, y = 250)
+        processButton = Button(self, text="Hallar orden",
+            command = consultar(ordenes_de_impresion, orden_final))
+        processButton.place(x = 0, y = 250)
 
         label2 = Label(self, text= orden_final).place(x=10, y=10)
 

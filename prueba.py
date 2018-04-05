@@ -1,26 +1,32 @@
-from pyswip import Prolog, Functor, Variable, Query
+from pyswip import Prolog
 prolog = Prolog()
 prolog.consult("p_queue.pl")
 
 
 def consultar(ordenes_de_impresion):
-    prolog.consult("p_queue.pl")
-
 
     if ordenes_de_impresion != []:
 
         for ini in prolog.query("monticulo_vacio(H)"):
             H = ini["H"]
-            print(H)
+            #print(H)
 
         cont = len(ordenes_de_impresion) // 2
 
         for i in range(cont):
             consulta = "anadir_elemento(" + H + "," + ordenes_de_impresion[2*i] + "," + ordenes_de_impresion[2*i + 1] + ",H)"
-            print(consulta)
             for resultado in prolog.query(consulta):
                 H = resultado["H"]
-                print(H)
+                H = H.replace("Functor(8253837,3,","t(")
+
+        for i in range(cont):
+            consulta = "obtener_primero(" + H + ", P,E,H)"
+            for resultado in prolog.query(consulta):
+                print(resultado["E"])
+                H = resultado["H"]
+                H = H.replace("Functor(8253837,3,","t(")
+
+
 
 
 def main():
